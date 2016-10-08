@@ -143,6 +143,41 @@ public class Graph<T> {
 		return null;
 	}
 
+	public Vertex<T> DFSearch(Vertex<T>, start, T elm){
+		if (start == null || elm == null)
+			throw new NullPointerException();
+		
+		if (!adjacencyList.containsKey(start)){
+			System.out.println("Search failed: Invalid start vertex.");
+			return null;
+		}
+		
+		setAllVisitedFalse();
+		
+		Stack<Vertex<T>> stack = new Stack<>();
+		stack.add(start);
+		start.setVisited(true);
+		
+		while(!stack.isEmpty){
+			Vertex<T> u = stack.pop();
+			if (u.getData().equals(elm))
+				return u;
+			
+			ArrayList<Edge<T>> list = adjacencyList.get(u);
+			if (list == null)
+				continue;
+			
+			for (Edge<T> e: list){
+				Vertex<T> v = e.getAdjacentVertex(u);
+				if(v.getVisited() == false) {
+					v.setVisited(true);
+					stack.add(v);
+				}
+			}
+		}
+		return null;
+	}
+	
 	private void setAllVisitedFalse() {
 		for (Vertex<T> u : adjacencyList.keySet())
 			u.setVisited(false);
